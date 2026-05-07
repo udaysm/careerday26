@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be a Marketing Detective! 🔍</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --purple: #7B2D8B;
+    --purple-light: #9B4DAB;
+    --purple-pale: #F3E8F7;
+    --gold: #F5B800;
+    --gold-dark: #D4A000;
+    --white: #FFFFFF;
+    --gray-light: #F8F8F8;
+    --text-dark: #1A1A2E;
+    --text-mid: #444466;
+    --green: #2ECC71;
+    --red: #E74C3C;
+    --shadow: 0 4px 20px rgba(123,45,139,0.15);
+    --shadow-lg: 0 8px 40px rgba(123,45,139,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #F3E8F7 0%, #FFF9E6 50%, #F3E8F7 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ===== SCREENS ===== */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
+    animation: fadeInUp 0.5s ease;
+  }
+  .screen.active { display: block; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--white);
+    border-radius: 50px;
+    box-shadow: var(--shadow);
+    margin: 0 auto 24px;
+    max-width: 400px;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--purple);
+  }
+  .progress-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #DDD;
+    transition: all 0.3s ease;
+  }
+  .progress-dot.active { background: var(--gold); transform: scale(1.3); }
+  .progress-dot.done { background: var(--purple); }
+
+  /* ===== INTRO SCREEN ===== */
+  #intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .badge-bounce {
+    font-size: 80px;
+    animation: bounce 1.2s infinite;
+    display: block;
+    margin-bottom: 16px;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .main-title {
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 900;
+    color: var(--purple);
+    line-height: 1.1;
+    margin-bottom: 10px;
+    text-shadow: 3px 3px 0 rgba(123,45,139,0.15);
+  }
+
+  .main-subtitle {
+    font-size: clamp(16px, 3vw, 22px);
+    font-weight: 700;
+    color: var(--gold-dark);
+    margin-bottom: 30px;
+  }
+
+  .intro-box {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 30px 36px;
+    max-width: 680px;
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--purple-pale);
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text-mid);
+    margin-bottom: 36px;
+    position: relative;
+  }
+  .intro-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--purple), var(--gold));
+    border-radius: 24px 24px 0 0;
+  }
+  .intro-box strong { color: var(--purple); }
+
+  /* ===== BUTTONS ===== */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    color: var(--white);
+    border: none;
+    padding: 18px 48px;
+    border-radius: 50px;
+    font-size: 22px;
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(123,45,139,0.4);
+    transition: all 0.2s ease;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(123,45,139,0.5);
+  }
+  .btn-primary:active { transform: translateY(0) scale(0.98); }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--text-dark);
+    border: none;
+    padding: 16px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(245,184,0,0.4);
+    transition: all 0.2s ease;
+  }
+  .btn-gold:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(245,184,0,0.5);
+  }
+
+  /* ===== ROUND HEADER ===== */
+  .round-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .round-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    color: var(--white);
+    padding: 8px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .round-title {
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 900;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+
+  /* ===== SCENARIO BOX ===== */
+  .scenario-box {
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    color: var(--white);
+    border-radius: 20px;
+    padding: 24px 30px;
+    max-width: 800px;
+    margin: 0 auto 30px;
+    font-size: clamp(15px, 2.5vw, 18px);
+    font-weight: 700;
+    line-height: 1.6;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .scenario-box::after {
+    content: '🔍';
+    position: absolute;
+    right: 20px;
+    bottom: -10px;
+    font-size: 60px;
+    opacity: 0.2;
+  }
+
+  /* ===== ROUND 1: CHARACTER CARDS ===== */
+  .cards-container {
+    max-width: 860px;
+    margin: 0 auto 24px;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 600px) {
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .character-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    border: 3px solid transparent;
+    box-shadow: var(--shadow);
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+  .character-card:hover:not(.revealed) {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--purple-light);
+  }
+  .character-card.selected {
+    border-color: var(--gold);
+    background: #FFFBEA;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 24px rgba(245,184,0,0.4);
+  }
+  .character-card.revealed.correct {
+    border-color: var(--green);
+    background: #EAFAF1;
+  }
+  .character-card.revealed.wrong {
+    border-color: var(--red);
+    background: #FDEDEC;
+  }
+  .character-card.revealed.missed {
+    border-color: var(--gold);
+    background: #FFFBEA;
+    animation: pulse-gold 0.6s ease;
+  }
+  @keyframes pulse-gold {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .char-emoji { font-size: 42px; margin-bottom: 8px; display: block; }
+  .char-name { font-size: 16px; font-weight: 900; color: var(--purple); margin-bottom: 6px; }
+  .char-desc { font-size: 13px; color: var(--text-mid); line-height: 1.4; }
+  .card-feedback {
+    display: none;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    padding: 8px;
+    border-radius: 10px;
+  }
+  .character-card.revealed .card-feedback { display: block; }
+  .character-card.revealed.correct .card-feedback { color: #1a7a3f; background: rgba(46,204,113,0.15); }
+  .character-card.revealed.wrong .card-feedback { color: #922b21; background: rgba(231,76,60,0.15); }
+  .character-card.revealed.missed .card-feedback { color: #7d6608; background: rgba(245,184,0,0.2); }
+
+  .check-btn-container { text-align: center; margin-bottom: 20px; }
+
+  /* ===== ROUND 2: AD PLACEMENT ===== */
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto 24px;
+  }
+  @media (max-width: 580px) {
+    .options-grid { grid-template-columns: 1fr; }
+  }
+
+  .option-card {
+    background: var(--white);
+    border-radius: 22px;
+    padding: 28px 22px;
+    text-align: center;
+    cursor: pointer;
+    border: 3px solid transparent;
+    box-shadow: var(--shadow);
+    transition: all 0.25s ease;
+    user-select: none;
+  }
+  .option-card:hover:not(.revealed) {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--purple-light);
+  }
+  .option-card.selected-option {
+    border-color: var(--gold);
+    background: #FFFBEA;
+  }
+  .option-card.revealed.correct-opt {
+    border-color: var(--green);
+    background: #EAFAF1;
+    animation: correctPulse 0.5s ease;
+  }
+  .option-card.revealed.wrong-opt {
+    border-color: var(--red);
+    background: #FDEDEC;
+  }
+  .option-card.revealed.show-correct {
+    border-color: var(--green);
+    background: #EAFAF1;
+    animation: correctPulse 0.5s ease 0.2s both;
+  }
+  @keyframes correctPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+
+  .option-icon { font-size: 48px; margin-bottom: 12px; display: block; }
+  .option-label { font-size: 17px; font-weight: 900; color: var(--purple); margin-bottom: 8px; }
+  .option-desc { font-size: 14px; color: var(--text-mid); line-height: 1.5; }
+  .option-result {
+    display: none;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 8px 12px;
+    border-radius: 10px;
+  }
+  .option-card.revealed .option-result { display: block; }
+  .option-card.revealed.correct-opt .option-result,
+  .option-card.revealed.show-correct .option-result { color: #1a7a3f; background: rgba(46,204,113,0.15); }
+  .option-card.revealed.wrong-opt .option-result { color: #922b21; background: rgba(231,76,60,0.15); }
+
+  /* ===== ROUND 3: BAR CHART ===== */
+  .chart-container {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 30px 24px;
+    max-width: 740px;
+    margin: 0 auto 28px;
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--purple-pale);
+  }
+  .chart-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--purple);
+    margin-bottom: 28px;
+  }
+  .bars-wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 12px;
+    height: 220px;
+    padding-bottom: 50px;
+    position: relative;
+  }
+  .bars-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 50px;
+    left: 0; right: 0;
+    height: 3px;
+    background: #EEE;
+    border-radius: 2px;
+  }
+
+  .bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 120px;
+    height: 100%;
+    justify-content: flex-end;
+    position: relative;
+  }
+  .bar-fill {
+    width: 100%;
+    max-width: 70px;
+    background: linear-gradient(to top, var(--purple), var(--purple-light));
+    border-radius: 10px 10px 0 0;
+    transition: height 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    height: 0;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(123,45,139,0.3);
+  }
+  .bar-fill.animated { /* set via JS */ }
+  .bar-value {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--gold-dark);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.8s;
+  }
+  .bar-fill.animated .bar-value { opacity: 1; }
+  .bar-label {
+    position: absolute;
+    bottom: -46px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-mid);
+    text-align: center;
+    width: 80px;
+    line-height: 1.3;
+  }
+
+  .answer-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    max-width: 640px;
+    margin: 0 auto 24px;
+  }
+  @media (max-width: 480px) {
+    .answer-buttons { grid-template-columns: 1fr; }
+  }
+
+  .ans-btn {
+    background: var(--white);
+    border: 3px solid var(--purple-pale);
+    border-radius: 16px;
+    padding: 18px 16px;
+    font-size: 17px;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    color: var(--purple);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow);
+  }
+  .ans-btn:hover:not(:disabled) {
+    border-color: var(--purple);
+    background: var(--purple-pale);
+    transform: translateY(-3px);
+  }
+  .ans-btn.correct-ans {
+    background: #EAFAF1;
+    border-color: var(--green);
+    color: #1a7a3f;
+    animation: correctPulse 0.5s ease;
+  }
+  .ans-btn.wrong-ans {
+    background: #FDEDEC;
+    border-color: var(--red);
+    color: #922b21;
+  }
+  .ans-btn:disabled { cursor: default; }
+
+  .r3-feedback {
+    display: none;
+    max-width: 640px;
+    margin: 0 auto 24px;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 18px 22px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.6;
+    box-shadow: var(--shadow);
+    border-left: 5px solid var(--green);
+    color: var(--text-dark);
+  }
+  .r3-feedback.show { display: block; animation: fadeInUp 0.4s ease; }
+
+  /* ===== REAL WORLD CONNECTION ===== */
+  .rwc-box {
+    display: none;
+    max-width: 800px;
+    margin: 0 auto 28px;
+    background: var(--white);
+    border-radius: 20px;
+    border-left: 6px solid var(--purple);
+    padding: 22px 28px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    animation: fadeInUp 0.5s ease;
+  }
+  .rwc-box.show { display: block; }
+  .rwc-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(123,45,139,0.04), rgba(245,184,0,0.04));
+    border-radius: 14px;
+    pointer-events: none;
+  }
+  .rwc-badge {
+    display: inline-block;
+    background: var(--purple);
+    color: var(--gold);
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .rwc-text {
+    font-size: 16px;
+    font-style: italic;
+    color: var(--text-mid);
+    line-height: 1.7;
+    font-weight: 600;
+  }
+  .rwc-text strong { color: var(--purple); font-style: normal; }
+
+  .next-btn-container { text-align: center; margin-top: 10px; }
+
+  /* ===== RESULTS SCREEN ===== */
+  #results {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px 60px;
+  }
+  #results.active { display: flex; }
+
+  #confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .results-badge {
+    font-size: 80px;
+    margin-bottom: 16px;
+    animation: bounce 1.5s infinite;
+  }
+  .results-title {
+    font-size: clamp(28px, 5vw, 46px);
+    font-weight: 900;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+  .results-subtitle {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 700;
+    color: var(--gold-dark);
+    margin-bottom: 30px;
+  }
+
+  .score-display {
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    color: var(--white);
+    border-radius: 30px;
+    padding: 28px 50px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-lg);
+  }
+  .score-number {
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .score-label { font-size: 18px; font-weight: 700; opacity: 0.9; }
+
+  .summary-box {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 28px 36px;
+    max-width: 640px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-lg);
+    text-align: left;
+    border: 3px solid var(--purple-pale);
+  }
+  .summary-title {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--purple);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .summary-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.5;
+  }
+  .summary-item:last-child { margin-bottom: 0; }
+
+  .closing-box {
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    color: var(--white);
+    border-radius: 24px;
+    padding: 26px 36px;
+    max-width: 640px;
+    margin-bottom: 30px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.7;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .signature {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 2px dashed rgba(123,45,139,0.3);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-mid);
+    max-width: 640px;
+    text-align: center;
+  }
+
+  /* ===== SCORE TRACKER ===== */
+  .score-tracker {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 900;
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+    display: none;
+  }
+  .score-tracker.visible { display: block; }
+
+  /* ===== UTILITY ===== */
+  .center { text-align: center; }
+  .mt16 { margin-top: 16px; }
+  .mt24 { margin-top: 24px; }
+  .instruction-text {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-mid);
+    margin-bottom: 20px;
+  }
+  .instruction-text span {
+    background: var(--gold);
+    color: var(--text-dark);
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 900;
+    margin-left: 8px;
+  }
+
+  /* Stars row */
+  .stars-row {
+    font-size: 32px;
+    margin-bottom: 10px;
+    animation: fadeInUp 0.5s ease 0.3s both;
+  }
+
+  /* Highlight box for score feedback */
+  .score-feedback-box {
+    background: var(--purple-pale);
+    border: 3px solid var(--purple);
+    border-radius: 20px;
+    padding: 16px 30px;
+    max-width: 500px;
+    margin: 0 auto 24px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--purple);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Score Tracker -->
+<div class="score-tracker" id="scoreTracker">⭐ Score: <span id="liveScore">0</span>/6</div>
+
+<!-- ==================== INTRO SCREEN ==================== -->
+<div class="screen active" id="intro">
+  <div style="max-width:760px;margin:0 auto;padding:20px 0;">
+    <span class="badge-bounce">🕵️</span>
+    <h1 class="main-title">Be a Marketing Detective! 🔍</h1>
+    <p class="main-subtitle">The skills that sell sneakers... also save lives! 👟➡️💊</p>
+
+    <div class="intro-box">
+      <p>Hi! I'm <strong>Uday Meka</strong>, and I'm a <strong>Marketing Analyst</strong>. My job is like being a <strong>DETECTIVE</strong> — I use <strong>DATA</strong> (clues!) to figure out the best way to get important medicines to patients who need them.</p>
+      <br>
+      <p>But guess what? The <strong>SAME detective skills</strong> work for ANYTHING — sneakers, video games, snacks... even medicine! 🎮👟🍕💊</p>
+      <br>
+      <p><strong>Today YOU are the detective. Ready? 🚀</strong></p>
+    </div>
+
+    <button class="btn-primary" onclick="startMission()">Start Mission! 🚀</button>
+  </div>
+</div>
+
+<!-- ==================== ROUND 1 SCREEN ==================== -->
+<div class="screen" id="round1">
+  <div style="max-width:900px;margin:0 auto;">
+
+    <div class="progress-bar">
+      <span>Round 1 of 3</span>
+      <div class="progress-dot active" id="dot1"></div>
+      <div class="progress-dot" id="dot2"></div>
+      <div class="progress-dot" id="dot3"></div>
+    </div>
+
+    <div class="round-header">
+      <div class="round-badge">🕵️ Round 1 — Mission: Target Acquired</div>
+      <h2 class="round-title">🎯 "Who Wants This?"</h2>
+    </div>
+
+    <div class="scenario-box">
+      🎮 A brand-new video game just dropped — it's called <strong>GALAXY QUEST X!</strong> It's an action-adventure game for consoles and PC, rated E10+, and it costs $60.<br><br>
+      Your job as a Marketing Detective: <strong>WHO should we show our ads to?</strong> Click everyone who's a good match, then hit CHECK!
+    </div>
+
+    <p class="instruction-text">Click all good targets! <span>Select multiple</span></p>
+
+    <div class="cards-container">
+      <div class="cards-grid" id="charGrid">
+
+        <div class="character-card" id="card-marcus" onclick="toggleCard(this, 'marcus')">
+          <span class="char-emoji">🎮</span>
+          <div class="char-name">Marcus, 11</div>
+          <div class="char-desc">Loves video games and spends his allowance on new releases. Has a PlayStation.</div>
+          <div class="card-feedback" id="fb-marcus">✅ YES! Marcus is exactly the target — he's the right age, has the hardware, and loves gaming!</div>
+        </div>
+
+        <div class="character-card" id="card-grandpa" onclick="toggleCard(this, 'grandpa')">
+          <span class="char-emoji">👴</span>
+          <div class="char-name">Grandpa Joe, 72</div>
+          <div class="char-desc">Doesn't own a gaming console. Prefers crossword puzzles and gardening.</div>
+          <div class="card-feedback" id="fb-grandpa">🌱 Not quite! Grandpa Joe doesn't have a console and prefers other hobbies. He's not our target right now.</div>
+        </div>
+
+        <div class="character-card" id="card-priya" onclick="toggleCard(this, 'priya')">
+          <span class="char-emoji">👧</span>
+          <div class="char-name">Priya, 10</div>
+          <div class="char-desc">Huge gamer! She watches YouTube gaming videos every day after school.</div>
+          <div class="card-feedback" id="fb-priya">✅ YES! Priya watches gaming content daily — she's already interested in exactly this type of game!</div>
+        </div>
+
+        <div class="character-card" id="card-sara" onclick="toggleCard(this, 'sara')">
+          <span class="char-emoji">👩‍💼</span>
+          <div class="char-name">GameStop Manager Sara</div>
+          <div class="char-desc">Manages a store that sells video games to thousands of customers.</div>
+          <div class="card-feedback" id="fb-sara">✅ YES! Stores like GameStop stock and sell games. We need Sara to carry GALAXY QUEST X!</div>
+        </div>
+
+        <div class="character-card" id="card-emma" onclick="toggleCard(this, 'emma')">
+          <span class="char-emoji">🍼</span>
+          <div class="char-name">Baby Emma, 2</div>
+          <div class="char-desc">Too young for video games! Loves stuffed animals and building blocks.</div>
+          <div class="card-feedback" id="fb-emma">🍼 Not quite! Emma is way too young. The E10+ rating means ages 10 and up!</div>
+        </div>
+
+        <div class="character-card" id="card-devon" onclick="toggleCard(this, 'devon')">
+          <span class="char-emoji">🧑</span>
+          <div class="char-name">Devon, 13</div>
+          <div class="char-desc">Saves up birthday money for new games. Big fan of action-adventure games.</div>
+          <div class="card-feedback" id="fb-devon">✅ YES! Devon saves up for exactly this type of game — he's a prime target!</div>
+        </div>
+
+      </div>
+
+      <div class="check-btn-container" id="checkBtn1Container">
+        <button class="btn-gold" onclick="checkRound1()">Check My Answers! ✅</button>
+      </div>
+
+      <div id="r1-result" style="display:none;text-align:center;margin-bottom:16px;">
+        <div class="score-feedback-box" id="r1-score-msg"></div>
+      </div>
+    </div>
+
+    <!-- Real World Connection -->
+    <div class="rwc-box" id="rwc1">
+      <div class="rwc-badge">💊 Real World Connection</div>
+      <p class="rwc-text">🔬 In Uday's job, instead of finding gamers, he finds <strong>PATIENTS and DOCTORS</strong> who need a specific medicine. The skill is the same: figure out exactly <strong>WHO needs your product</strong> before you spend money on ads!</p>
+    </div>
+
+    <div class="next-btn-container" id="next1Container" style="display:none;">
+      <button class="btn-primary" onclick="goToRound2()">Next Round! ➡️</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== ROUND 2 SCREEN ==================== -->
+<div class="screen" id="round2">
+  <div style="max-width:860px;margin:0 auto;">
+
+    <div class="progress-bar">
+      <span>Round 2 of 3</span>
+      <div class="progress-dot done" id="dot1b"></div>
+      <div class="progress-dot active" id="dot2b"></div>
+      <div class="progress-dot" id="dot3b"></div>
+    </div>
+
+    <div class="round-header">
+      <div class="round-badge">🕵️ Round 2 — Mission: Best Ad Spot</div>
+      <h2 class="round-title">📍 "Pick the Best Ad Spot!"</h2>
+    </div>
+
+    <div class="scenario-box">
+      👟 Nike just designed an EPIC new sneaker called the <strong>AirBlast Pro</strong>. It's built for kids who play basketball.<br><br>
+      Your job: Pick the <strong>BEST place to run the ad</strong> to reach the most kids! Only ONE right answer — choose wisely! 🧠
+    </div>
+
+    <p class="instruction-text">Tap the BEST option!</p>
+
+    <div class="options-grid" id="optionsGrid">
+
+      <div class="option-card" id="opt-a" onclick="selectOption('a')">
+        <span class="option-icon">🏀</span>
+        <div class="option-label">Option A: NBA TV + YouTube</div>
+        <div class="option-desc">During a live NBA game broadcast on TV + NBA highlights on YouTube</div>
+        <div class="option-result" id="res-a">🏆 PERFECT! Basketball fans are already watching — this is laser-focused targeting!</div>
+      </div>
+
+      <div class="option-card" id="opt-b" onclick="selectOption('b')">
+        <span class="option-icon">📰</span>
+        <div class="option-label">Option B: Newspaper Ad</div>
+        <div class="option-desc">In a newspaper ad (print edition)</div>
+        <div class="option-result" id="res-b">Not quite! Mostly older adults read print newspapers. Kids aren't flipping through the paper!</div>
+      </div>
+
+      <div class="option-card" id="opt-c" onclick="selectOption('c')">
+        <span class="option-icon">🌾</span>
+        <div class="option-label">Option C: Farming Website</div>
+        <div class="option-desc">On a farming tractor supply website</div>
+        <div class="option-result" id="res-c">Not quite! Completely wrong audience — basketball kids aren't browsing tractor sites!</div>
+      </div>
+
+      <div class="option-card" id="opt-d" onclick="selectOption('d')">
+        <span class="option-icon">🎮</span>
+        <div class="option-label">Option D: Roblox Loading Screen</div>
+        <div class="option-desc">On a Roblox loading screen</div>
+        <div class="option-result" id="res-d">Nice try! Kids do see this, but they're not specifically basketball players. Less targeted than Option A!</div>
+      </div>
+
+    </div>
+
+    <div id="r2-result" style="display:none;text-align:center;margin-bottom:16px;">
+      <div class="score-feedback-box" id="r2-score-msg"></div>
+    </div>
+
+    <!-- Real World Connection -->
+    <div class="rwc-box" id="rwc2">
+      <div class="rwc-badge">💊 Real World Connection</div>
+      <p class="rwc-text">💊 Uday does the <strong>EXACT same thing for medicine!</strong> He looks at data to figure out: are doctors reading medical journals? Attending conferences? Using certain websites? Then he puts the message <strong>WHERE they'll actually see it.</strong> It's all about reaching the <strong>RIGHT person in the RIGHT place!</strong></p>
+    </div>
+
+    <div class="next-btn-container" id="next2Container" style="display:none;">
+      <button class="btn-primary" onclick="goToRound3()">Final Round! 🏁</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== ROUND 3 SCREEN ==================== -->
+<div class="screen" id="round3">
+  <div style="max-width:800px;margin:0 auto;">
+
+    <div class="progress-bar">
+      <span>Round 3 of 3</span>
+      <div class="progress-dot done"></div>
+      <div class="progress-dot done"></div>
+      <div class="progress-dot active"></div>
+    </div>
+
+    <div class="round-header">
+      <div class="round-badge">🕵️ Round 3 — Mission: Read the Data!</div>
+      <h2 class="round-title">📊 "Read the Data!"</h2>
+    </div>
+
+    <div class="scenario-box">
+      🍕 Your favorite pizza brand, <strong>ZAPPZA PIZZA 🍕</strong>, just launched a new pizza flavor! They ran ads in 5 different places to see which one got the most kids to try it.<br><br>
+      Study the data below, then answer the question like a true Marketing Detective! 🔍
+    </div>
+
+    <!-- Bar Chart -->
+    <div class="chart-container">
+      <div class="chart-title">📊 How did kids find out about Zappza Pizza's new flavor?</div>
+      <div class="bars-wrapper" id="barsWrapper">
+
+        <div class="bar-item">
+          <div class="bar-fill" id="bar1" data-height="88">
+            <div class="bar-value">48%</div>
+          </div>
+          <div class="bar-label">YouTube Ad 📺</div>
+        </div>
+
+        <div class="bar-item">
+          <div class="bar-fill" id="bar2" data-height="40">
+            <div class="bar-value">22%</div>
+          </div>
+          <div class="bar-label">School Flyer 📄</div>
+        </div>
+
+        <div class="bar-item">
+          <div class="bar-fill" id="bar3" data-height="33">
+            <div class="bar-value">18%</div>
+          </div>
+          <div class="bar-label">Instagram 📸</div>
+        </div>
+
+        <div class="bar-item">
+          <div class="bar-fill" id="bar4" data-height="13">
+            <div class="bar-value">7%</div>
+          </div>
+          <div class="bar-label">Newspaper 📰</div>
+        </div>
+
+        <div class="bar-item">
+          <div class="bar-fill" id="bar5" data-height="9">
+            <div class="bar-value">5%</div>
+          </div>
+          <div class="bar-label">Radio 📻</div>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="instruction-text" style="margin-bottom:16px;">
+      If you could only pick ONE place to spend your ad budget to reach the most kids, what would you choose?
+    </p>
+
+    <div class="answer-buttons" id="answerBtns">
+      <button class="ans-btn" id="ans-yt" onclick="answerR3('yt')">YouTube Ads 📺</button>
+      <button class="ans-btn" id="ans-ig" onclick="answerR3('ig')">Instagram 📸</button>
+      <button class="ans-btn" id="ans-np" onclick="answerR3('np')">Newspaper 📰</button>
+      <button class="ans-btn" id="ans-rd" onclick="answerR3('rd')">Radio 📻</button>
+    </div>
+
+    <div class="r3-feedback" id="r3-feedback"></div>
+
+    <div id="r3-result" style="display:none;text-align:center;margin-bottom:16px;">
+      <div class="score-feedback-box" id="r3-score-msg"></div>
+    </div>
+
+    <!-- Real World Connection -->
+    <div class="rwc-box" id="rwc3">
+      <div class="rwc-badge">💊 Real World Connection</div>
+      <p class="rwc-text">📊 This is <strong>literally what Uday does every day!</strong> He looks at real data to see: did doctors learn about the medicine from a journal? A conference? A website? Then he puts the budget <strong>where it WORKS.</strong> Data saves money AND helps more patients get the medicine they need!</p>
+    </div>
+
+    <div class="next-btn-container" id="next3Container" style="display:none;">
+      <button class="btn-primary" onclick="goToResults()">See My Results! 🏆</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== RESULTS SCREEN ==================== -->
+<div class="screen" id="results">
+  <div style="max-width:680px;margin:0 auto;width:100%;">
+
+    <div class="results-badge" id="resultsBadge">🏆</div>
+    <h2 class="results-title" id="resultsTitle">MASTER DETECTIVE!</h2>
+    <p class="results-subtitle" id="resultsSubtitle">You're a natural Marketing Analyst!</p>
+
+    <div class="stars-row" id="starsRow">⭐⭐⭐⭐⭐⭐</div>
+
+    <div class="score-display">
+      <div class="score-number" id="finalScoreNum">6/6</div>
+      <div class="score-label">Detective Points Earned!</div>
+    </div>
+
+    <div class="summary-box">
+      <div class="summary-title">🧠 What We Learned Today:</div>
+      <div class="summary-item">🎯 <span>Good marketing = finding the <strong>RIGHT person</strong> for your product</span></div>
+      <div class="summary-item">💬 <span>Great messages are <strong>CLEAR, HONEST, and EASY</strong> to understand</span></div>
+      <div class="summary-item">📊 <span><strong>DATA is your superpower</strong> — always follow the numbers!</span></div>
+    </div>
+
+    <div class="closing-box">
+      These same 3 skills — <strong>targeting, messaging, and data</strong> — are how Uday helps get life-changing medicines to patients who need them every single day.<br><br>
+      Pretty cool, right? 💜
+    </div>
+
+    <button class="btn-gold" onclick="playAgain()" style="margin-bottom:20px;">Play Again 🔄</button>
+
+    <div class="signature">— Uday Meka, Director of Marketing Analytics 💜</div>
+
+  </div>
+</div>
+
+<script>
+  // ===== STATE =====
+  let score = 0;
+  let selectedCards = new Set();
+  let r1Checked = false;
+  let r2Answered = false;
+  let r3Answered = false;
+  let barsAnimated = false;
+
+  const CORRECT_CARDS = ['marcus', 'priya', 'sara', 'devon'];
+
+  // ===== NAVIGATION =====
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  function startMission() {
+    document.getElementById('scoreTracker').classList.add('visible');
+    showScreen('round1');
+  }
+
+  function goToRound2() {
+    showScreen('round2');
+  }
+
+  function goToRound3() {
+    showScreen('round3');
+    setTimeout(() => animateBars(), 400);
+  }
+
+  function goToResults() {
+    showScreen('results');
+    document.getElementById('scoreTracker').classList.remove('visible');
+    showResults();
+    launchConfetti();
+  }
+
+  function playAgain() {
+    // Reset state
+    score = 0;
+    selectedCards = new Set();
+    r1Checked = false;
+    r2Answered = false;
+    r3Answered = false;
+    barsAnimated = false;
+
+    document.getElementById('liveScore').textContent = '0';
+
+    // Reset Round 1
+    document.querySelectorAll('.character-card').forEach(c => {
+      c.classList.remove('selected','revealed','correct','wrong','missed');
+    });
+    document.getElementById('checkBtn1Container').style.display = 'block';
+    document.getElementById('r1-result').style.display = 'none';
+    document.getElementById('rwc1').classList.remove('show');
+    document.getElementById('next1Container').style.display = 'none';
+
+    // Reset Round 2
+    document.querySelectorAll('.option-card').forEach(c => {
+      c.classList.remove('selected-option','revealed','correct-opt','wrong-opt','show-correct');
+    });
+    document.getElementById('r2-result').style.display = 'none';
+    document.getElementById('rwc2').classList.remove('show');
+    document.getElementById('next2Container').style.display = 'none';
+
+    // Reset Round 3
+    document.querySelectorAll('.ans-btn').forEach(b => {
+      b.classList.remove('correct-ans','wrong-ans');
+      b.disabled = false;
+    });
+    document.getElementById('r3-feedback').classList.remove('show');
+    document.getElementById('r3-result').style.display = 'none';
+    document.getElementById('rwc3').classList.remove('show');
+    document.getElementById('next3Container').style.display = 'none';
+
+    // Reset bars
+    document.querySelectorAll('.bar-fill').forEach(b => {
+      b.style.height = '0px';
+      b.classList.remove('animated');
+      const val = b.querySelector('.bar-value');
+      if(val) val.style.opacity = '0';
+    });
+
+    document.getElementById('scoreTracker').classList.add('visible');
+    showScreen('round1');
+  }
+
+  // ===== ROUND 1 LOGIC =====
+  function toggleCard(card, id) {
+    if (r1Checked) return;
+    if (selectedCards.has(id)) {
+      selectedCards.delete(id);
+      card.classList.remove('selected');
+    } else {
+      selectedCards.add(id);
+      card.classList.add('selected');
+    }
+  }
+
+  function checkRound1() {
+    if (r1Checked) return;
+    r1Checked = true;
+
+    let roundScore = 0;
+    const allIds = ['marcus','grandpa','priya','sara','emma','devon'];
+
+    allIds.forEach(id => {
+      const card = document.getElementById('card-' + id);
+      const isCorrectTarget = CORRECT_CARDS.includes(id);
+      const wasSelected = selectedCards.has(id);
+
+      card.classList.add('revealed');
+
+      if (isCorrectTarget && wasSelected) {
+        card.classList.add('correct');
+        roundScore++;
+      } else if (!isCorrectTarget && wasSelected) {
+        card.classList.add('wrong');
+      } else if (isCorrectTarget && !wasSelected) {
+        card.classList.add('missed');
+      } else {
+        card.classList.add('correct');
+      }
+    });
+
+    score += roundScore;
+    document.getElementById('liveScore').textContent = score;
+
+    document.getElementById('checkBtn1Container').style.display = 'none';
+
+    const msg = document.getElementById('r1-score-msg');
+    if (roundScore === 4) {
+      msg.textContent = '🎉 Perfect! You found all 4 correct targets! (+' + roundScore + ' points)';
+    } else if (roundScore >= 2) {
+      msg.textContent = '👍 Nice work! You found ' + roundScore + ' of 4 targets! (+' + roundScore + ' points)';
+    } else {
+      msg.textContent = '🔍 You got ' + roundScore + ' of 4. Check the cards to see the answers! (+' + roundScore + ' points)';
+    }
+    document.getElementById('r1-result').style.display = 'block';
+
+    setTimeout(() => {
+      document.getElementById('rwc1').classList.add('show');
+      document.getElementById('next1Container').style.display = 'block';
+    }, 600);
+  }
+
+  // ===== ROUND 2 LOGIC =====
+  function selectOption(choice) {
+    if (r2Answered) return;
+    r2Answered = true;
+
+    const options = ['a','b','c','d'];
+    options.forEach(o => {
+      const el = document.getElementById('opt-' + o);
+      el.classList.add('revealed');
+      if (o === choice && o === 'a') {
+        el.classList.add('correct-opt');
+      } else if (o === choice && o !== 'a') {
+        el.classList.add('wrong-opt');
+      } else if (o === 'a') {
+        el.classList.add('show-correct');
+      }
+      el.onclick = null;
+    });
+
+    const msg = document.getElementById('r2-score-msg');
+    if (choice === 'a') {
+      score += 1;
+      document.getElementById('liveScore').textContent = score;
+      msg.textContent = '🎉 Correct! NBA TV + YouTube is the perfect spot! (+1 point)';
+    } else {
+      msg.textContent = '🔍 Not quite! Option A (NBA TV + YouTube) was the best choice. Check it out!';
+    }
+    document.getElementById('r2-result').style.display = 'block';
+
+    setTimeout(() => {
+      document.getElementById('rwc2').classList.add('show');
+      document.getElementById('next2Container').style.display = 'block';
+    }, 600);
+  }
+
+  // ===== ROUND 3 LOGIC =====
+  function animateBars() {
+    if (barsAnimated) return;
+    barsAnimated = true;
+
+    const bars = document.querySelectorAll('.bar-fill');
+    bars.forEach((bar, i) => {
+      const targetH = parseInt(bar.getAttribute('data-height'));
+      setTimeout(() => {
+        bar.style.height = targetH + 'px';
+        bar.classList.add('animated');
+        const val = bar.querySelector('.bar-value');
+        if (val) {
+          setTimeout(() => { val.style.opacity = '1'; }, 900);
+        }
+      }, i * 150);
+    });
+  }
+
+  function answerR3(choice) {
+    if (r3Answered) return;
+    r3Answered = true;
+
+    const btns = document.querySelectorAll('.ans-btn');
+    btns.forEach(b => b.disabled = true);
+
+    const feedback = document.getElementById('r3-feedback');
+    const msg = document.getElementById('r3-score-msg');
+
+    if (choice === 'yt') {
+      document.getElementById('ans-yt').classList.add('correct-ans');
+      score += 1;
+      document.getElementById('liveScore').textContent = score;
+      feedback.innerHTML = '🎉 That\'s right! <strong>48% of kids</strong> discovered the pizza through YouTube ads — nearly HALF! A good marketing detective always lets the <strong>DATA point to the answer</strong>. Never guess when you have numbers!';
+      feedback.classList.add('show');
+      msg.textContent = '🎉 Correct! YouTube Ads was the clear winner! (+1 point)';
+    } else {
+      document.getElementById('ans-' + choice).classList.add('wrong-ans');
+      document.getElementById('ans-yt').classList.add('correct-ans');
+      feedback.innerHTML = '🔍 Nice try! But look at the data — <strong>YouTube Ads had 48%</strong>, nearly HALF of all kids! Always follow the numbers. That\'s what a Marketing Detective does!';
+      feedback.classList.add('show');
+      msg.textContent = '🔍 Not quite! YouTube Ads (48%) was the data winner. No points this time, but great thinking!';
+    }
+
+    document.getElementById('r3-result').style.display = 'block';
+
+    setTimeout(() => {
+      document.getElementById('rwc3').classList.add('show');
+      document.getElementById('next3Container').style.display = 'block';
+    }, 700);
+  }
+
+  // ===== RESULTS =====
+  function showResults() {
+    document.getElementById('finalScoreNum').textContent = score + '/6';
+
+    const badge = document.getElementById('resultsBadge');
+    const title = document.getElementById('resultsTitle');
+    const sub = document.getElementById('resultsSubtitle');
+    const stars = document.getElementById('starsRow');
+
+    if (score === 6) {
+      badge.textContent = '🏆';
+      title.textContent = 'MASTER DETECTIVE!';
+      sub.textContent = "You're a natural Marketing Analyst!";
+      stars.textContent = '⭐⭐⭐⭐⭐⭐';
+    } else if (score >= 4) {
+      badge.textContent = '🥈';
+      title.textContent = 'Sharp Detective!';
+      sub.textContent = "You've got great instincts!";
+      stars.textContent = '⭐⭐⭐⭐⭐';
+    } else if (score >= 2) {
+      badge.textContent = '🥉';
+      title.textContent = 'Good Effort, Detective!';
+      sub.textContent = "Every great analyst learns from data!";
+      stars.textContent = '⭐⭐⭐';
+    } else {
+      badge.textContent = '🔍';
+      title.textContent = 'Keep Investigating!';
+      sub.textContent = "The best detectives never give up!";
+      stars.textContent = '⭐⭐';
+    }
+  }
+
+  // ===== CONFETTI =====
+  function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const pieces = [];
+    const colors = ['#7B2D8B','#F5B800','#2ECC71','#E74C3C','#3498DB','#FF69B4','#FF8C00'];
+    const shapes = ['rect','circle','triangle'];
+
+    for (let i = 0; i < 160; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: -20 - Math.random() * 200,
+        w: 8 + Math.random() * 12,
+        h: 6 + Math.random() * 10,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        shape: shapes[Math.floor(Math.random() * shapes.length)],
+        vx: (Math.random() - 0.5) * 4,
+        vy: 2 + Math.random() * 4,
+        angle: Math.random() * Math.PI * 2,
+        va: (Math.random() - 0.5) * 0.15,
+        alpha: 1
+      });
+    }
+
+    let frame = 0;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.angle += p.va;
+        if (frame > 120) p.alpha -= 0.008;
+        p.alpha = Math.max(0, p.alpha);
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.fillStyle = p.color;
+
+        if (p.shape === 'rect') {
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        } else if (p.shape === 'circle') {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.w/2, 0, Math.PI*2);
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(0, -p.h/2);
+          ctx.lineTo(p.w/2, p.h/2);
+          ctx.lineTo(-p.w/2, p.h/2);
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.restore();
+      });
+
+      frame++;
+      if (frame < 240) requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    draw();
+  }
+
+  // Handle resize for confetti canvas
+  window.addEventListener('resize', () => {
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+</body>
+</html>
